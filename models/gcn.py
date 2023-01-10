@@ -229,7 +229,8 @@ class GCN(BaseModel):
                                             output_padding=1, stride=2, bias=False)
         self.final_conv = nn.Conv2d(num_classes, num_classes, kernel_size=1)
         if freeze_bn: self.freeze_bn()
-        if freeze_backbone: 
+        # if freeze_backbone: 
+        if freeze_bn:
             set_trainable([self.backbone], False)
 
     def forward(self, x):

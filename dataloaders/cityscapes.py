@@ -26,7 +26,7 @@ class CityScapesDataset(BaseDataSet):
         super(CityScapesDataset, self).__init__(**kwargs)
 
     def _set_files(self):
-        assert (self.mode == 'fine' and self.split in ['train', 'val']) or \
+        assert (self.mode == 'fine' and self.split in ['train', 'val', 'test']) or \
         (self.mode == 'coarse' and self.split in ['train', 'train_extra', 'val'])
 
         SUFIX = '_gtFine_labelIds.png'
@@ -35,8 +35,10 @@ class CityScapesDataset(BaseDataSet):
             label_path = os.path.join(self.root, 'gtCoarse', 'gtCoarse', self.split)
         else:
             img_dir_name = 'leftImg8bit_trainvaltest'
-            label_path = os.path.join(self.root, 'gtFine_trainvaltest', 'gtFine', self.split)
-        image_path = os.path.join(self.root, img_dir_name, 'leftImg8bit', self.split)
+            # label_path = os.path.join(self.root, 'gtFine_trainvaltest', 'gtFine', self.split)
+            label_path = os.path.join(self.root, 'gtFine', self.split)
+        # image_path = os.path.join(self.root, img_dir_name, 'leftImg8bit', self.split)
+        image_path = os.path.join(self.root, 'leftImg8bit', self.split)
         assert os.listdir(image_path) == os.listdir(label_path)
 
         image_paths, label_paths = [], []
@@ -52,9 +54,8 @@ class CityScapesDataset(BaseDataSet):
         label = np.asarray(Image.open(label_path), dtype=np.int32)
         for k, v in self.id_to_trainId.items():
             label[label == k] = v
+        # if np.all(label == ignore_label) is False:
         return image, label, image_id
-
-
 
 class CityScapes(BaseDataLoader):
     def __init__(self, data_dir, batch_size, split, crop_size=None, base_size=None, scale=True, num_workers=1, mode='fine', val=False,

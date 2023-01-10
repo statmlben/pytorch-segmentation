@@ -7,7 +7,7 @@ from itertools import chain
 from math import ceil
 
 class SegNet(BaseModel):
-    def __init__(self, num_classes, in_channels=3, pretrained=True, freeze_bn=False, **_):
+    def __init__(self, num_classes, in_channels=3, pretrained=True, freeze_bn=False, freeze_backbone=False, **_):
         super(SegNet, self).__init__()
         vgg_bn = models.vgg16_bn(pretrained= pretrained)
         encoder = list(vgg_bn.features.children())

@@ -11,6 +11,8 @@ from utils import Logger
 from utils.torchsummary import summary
 from trainer import Trainer
 
+## test for the new things
+
 def get_instance(module, name, config, *args):
     # GET THE CORRESPONDING CLASS / FCT 
     return getattr(module, config[name]['type'])(*args, **config[name]['args'])
@@ -21,6 +23,7 @@ def main(config, resume):
     # DATA LOADERS
     train_loader = get_instance(dataloaders, 'train_loader', config)
     val_loader = get_instance(dataloaders, 'val_loader', config)
+    test_loader = get_instance(dataloaders, 'test_loader', config)
 
     # MODEL
     model = get_instance(models, 'arch', config, train_loader.dataset.num_classes)
@@ -28,6 +31,7 @@ def main(config, resume):
 
     # LOSS
     loss = getattr(losses, config['loss'])(ignore_index = config['ignore_index'])
+    # loss = getattr(losses, config['loss'])()
 
     # TRAINING
     trainer = Trainer(

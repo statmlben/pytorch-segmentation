@@ -12,6 +12,12 @@ import cv2
 from torch.utils.data import Dataset
 from torchvision import transforms
 
+ignore_label = 255
+ID_TO_TRAINID={}
+# ID_TO_TRAINID = {0: ignore_label, 1: 0, 2: 1, 3: 2, 4: 3, 5: 4, 6:5, 7:6, 8:7, 
+#                 9:8, 10:9, 11:10, 12:11, 13:12, 14:13, 15:14, 16:15, 17:16, 18:17, 19:18, 20:19}
+
+
 class VOCDataset(BaseDataSet):
     """
     Pascal Voc dataset
@@ -20,6 +26,7 @@ class VOCDataset(BaseDataSet):
     def __init__(self, **kwargs):
         self.num_classes = 21
         self.palette = palette.get_voc_palette(self.num_classes)
+        self.id_to_trainId = ID_TO_TRAINID
         super(VOCDataset, self).__init__(**kwargs)
 
     def _set_files(self):
@@ -37,6 +44,8 @@ class VOCDataset(BaseDataSet):
         image = np.asarray(Image.open(image_path), dtype=np.float32)
         label = np.asarray(Image.open(label_path), dtype=np.int32)
         image_id = self.files[index].split("/")[-1].split(".")[0]
+        for k, v in self.id_to_trainId.items():
+            label[label == k] = v
         return image, label, image_id
 
 class VOCAugDataset(BaseDataSet):

@@ -139,6 +139,7 @@ def main():
         os.makedirs('outputs')
 
     image_files = sorted(glob(os.path.join(args.images, f'*.{args.extension}')))
+
     with torch.no_grad():
         tbar = tqdm(image_files, ncols=100)
         for img_file in tbar:
