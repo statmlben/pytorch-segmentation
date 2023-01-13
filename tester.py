@@ -82,6 +82,7 @@ class Tester(BaseTester):
                     loss = loss.mean()
                 self.total_loss.update(loss.item())
 
+                output = output / self.config['predict']['temperature']
                 if self.config['predict']['test'] == 'max':
                     if self.config['loss'][:3] == 'BCE':
                         out_prob = output.sigmoid()
@@ -144,7 +145,7 @@ class Tester(BaseTester):
                 **seg_metrics
             }
             
-            self.logger.info(f'\n    ## TESTING Restuls for Model: %s + Loss: %s + predict: %s ## ' %(self.config['name'], self.config['loss'], self.config['predict']['test']))
+            self.logger.info(f'\n    - TESTING Restuls for Model: %s + Loss: %s + predict: %s + temperature: %.2f  - ' %(self.config['name'], self.config['loss'], self.config['predict']['test'], self.config['predict']['temperature']))
             for k, v in log.items():
                 self.logger.info(f'         {str(k):15s}: {v}')
 

@@ -46,13 +46,15 @@ if __name__=='__main__':
     parser = argparse.ArgumentParser(description='PyTorch Testing')
     parser.add_argument('-c', '--config', default='config.json',type=str,
                         help='Path to the config file (default: config.json)')
+    parser.add_argument('-t', '--temperature', default=1.0, type=float,
+                        help='temperature scaling to improve calibration of probability estimation')
     parser.add_argument('-r', '--resume', default=None, type=str,
                         help='Path to the .pth model checkpoint to resume training')
     parser.add_argument('-d', '--device', default=None, type=str,
                            help='indices of GPUs to enable (default: all)')
-    parser.add_argument('-p', '--predict', default=None, type=str,
+    parser.add_argument('-p', '--predict', default="rankdice", type=str,
                            help='how to make prediction after obtaining the probs')
-    parser.add_argument('-TH', '--threshold', default=None, type=float,
+    parser.add_argument('-TH', '--threshold', default=0.5, type=float,
                            help='the threshold of a tresholding-based segmentation framework')
     # parser.add_argument('-l', '--CoI', default=None, type=list,
     #                        help='classes of interests')
@@ -64,6 +66,7 @@ if __name__=='__main__':
     if args.predict:
         config['predict']['test'] = args.predict
         config['predict']['threshold'] = args.threshold
+        config['predict']['temperature'] = args.temperature
         # config['predict']['CoI'] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
     if args.device:
         os.environ["CUDA_VISIBLE_DEVICES"] = args.device
